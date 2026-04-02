@@ -49,12 +49,12 @@ const Sales = () => {
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon sales">💰</div>
-          <div className="stat-value">${totalToday.toFixed(2)}</div>
+          <div className="stat-value">KES{totalToday.toFixed(2)}</div>
           <div className="stat-label">Today's Sales</div>
         </div>
         <div className="stat-card">
           <div className="stat-icon profit">📈</div>
-          <div className="stat-value">${totalProfit.toFixed(2)}</div>
+          <div className="stat-value">KES{totalProfit.toFixed(2)}</div>
           <div className="stat-label">Total Profit</div>
         </div>
       </div>
@@ -79,7 +79,7 @@ const Sales = () => {
                 <option value="">Choose a product...</option>
                 {products.filter(p => p.stockQuantity > 0).map(p => (
                   <option key={p._id} value={p._id}>
-                    {p.name} - ${p.sellPrice} (Stock: {p.stockQuantity})
+                    {p.name} - KES{p.sellPrice} (Stock: {p.stockQuantity})
                   </option>
                 ))}
               </select>
@@ -140,9 +140,9 @@ const Sales = () => {
                   <tr key={sale._id}>
                     <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{sale.productName}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{sale.quantity}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">${sale.sellingPrice}</td>
-                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>${sale.total}</td>
-                    <td className="px-4 py-3 whitespace-nowrap" style={{ color: '#10b981', fontWeight: '600' }}>+${sale.profit}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">KES{sale.sellingPrice}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>KES{sale.total}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ color: '#10b981', fontWeight: '600' }}>+KES{sale.profit}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span style={{ background: '#f3f4f6', padding: '0.25rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>
                         {sale.paymentMethod}

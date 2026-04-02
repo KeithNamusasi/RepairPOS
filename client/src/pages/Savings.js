@@ -35,7 +35,7 @@ const Savings = () => {
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon savings">💎</div>
-          <div className="stat-value">${totalSavings.toFixed(2)}</div>
+          <div className="stat-value">KES{totalSavings.toFixed(2)}</div>
           <div className="stat-label">Total Savings</div>
         </div>
       </div>
@@ -83,7 +83,7 @@ const Savings = () => {
               <tbody>
                 {savings.map(saving => (
                   <tr key={saving._id}>
-                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600', color: '#10b981', fontSize: '1.1rem' }}>+${saving.amount}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600', color: '#10b981', fontSize: '1.1rem' }}>+KES{saving.amount}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{saving.note || '-'}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{new Date(saving.date).toLocaleDateString()}</td>
                   </tr>

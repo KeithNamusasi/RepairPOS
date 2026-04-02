@@ -52,7 +52,7 @@ const Reports = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`tab ${activeTab === tab.id ? 'active' : ''}`}
+            className={`tab KES{activeTab === tab.id ? 'active' : ''}`}
           >
             {tab.label}
           </button>
@@ -63,22 +63,22 @@ const Reports = () => {
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-icon sales">💰</div>
-            <div className="stat-value">${summary.totalSalesToday.toFixed(2)}</div>
+            <div className="stat-value">KES{summary.totalSalesToday.toFixed(2)}</div>
             <div className="stat-label">Today's Sales</div>
           </div>
           <div className="stat-card">
             <div className="stat-icon profit">📈</div>
-            <div className="stat-value">${summary.profitToday.toFixed(2)}</div>
+            <div className="stat-value">KES{summary.profitToday.toFixed(2)}</div>
             <div className="stat-label">Today's Profit</div>
           </div>
           <div className="stat-card">
             <div className="stat-icon purchases">🛒</div>
-            <div className="stat-value">${summary.totalPurchases.toFixed(2)}</div>
+            <div className="stat-value">KES{summary.totalPurchases.toFixed(2)}</div>
             <div className="stat-label">Total Purchases</div>
           </div>
           <div className="stat-card">
             <div className="stat-icon repairs">🔧</div>
-            <div className="stat-value">${summary.totalRepairIncome.toFixed(2)}</div>
+            <div className="stat-value">KES{summary.totalRepairIncome.toFixed(2)}</div>
             <div className="stat-label">Repair Income</div>
           </div>
           <div className="stat-card">
@@ -98,7 +98,7 @@ const Reports = () => {
           </div>
           <div className="stat-card">
             <div className="stat-icon savings">💎</div>
-            <div className="stat-value">${summary.totalSavings.toFixed(2)}</div>
+            <div className="stat-value">KES{summary.totalSavings.toFixed(2)}</div>
             <div className="stat-label">Total Savings</div>
           </div>
         </div>
@@ -111,8 +111,8 @@ const Reports = () => {
           </div>
           <div className="stat-card" style={{ marginBottom: '1.5rem', background: 'linear-gradient(135deg, #10b981, #059669)', color: 'white' }}>
             <div style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '0.25rem' }}>Total Revenue</div>
-            <div style={{ fontSize: '2rem', fontWeight: '700' }}>${dailySales.total.toFixed(2)}</div>
-            <div style={{ marginTop: '0.5rem', color: 'rgba(255,255,255,0.9)' }}>📈 Profit: ${dailySales.profit.toFixed(2)}</div>
+            <div style={{ fontSize: '2rem', fontWeight: '700' }}>KES{dailySales.total.toFixed(2)}</div>
+            <div style={{ marginTop: '0.5rem', color: 'rgba(255,255,255,0.9)' }}>📈 Profit: KES{dailySales.profit.toFixed(2)}</div>
           </div>
           {dailySales.sales.length === 0 ? (
             <div className="empty-state">
@@ -135,8 +135,8 @@ const Reports = () => {
                     <tr key={sale._id}>
                       <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{sale.productName}</td>
                       <td className="px-4 py-3 whitespace-nowrap">{sale.quantity}</td>
-                      <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>${sale.total}</td>
-                      <td className="px-4 py-3 whitespace-nowrap" style={{ color: '#10b981', fontWeight: '600' }}>+${sale.profit}</td>
+                      <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>KES{sale.total}</td>
+                      <td className="px-4 py-3 whitespace-nowrap" style={{ color: '#10b981', fontWeight: '600' }}>+KES{sale.profit}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -173,8 +173,8 @@ const Reports = () => {
                     <tr key={product._id} style={product.stockQuantity < 5 ? { background: '#fef2f2' } : {}}>
                       <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{product.name}</td>
                       <td className="px-4 py-3 whitespace-nowrap"><span style={{ background: '#e0e7ff', color: '#4338ca', padding: '0.25rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>{product.category}</span></td>
-                      <td className="px-4 py-3 whitespace-nowrap">${product.buyPrice}</td>
-                      <td className="px-4 py-3 whitespace-nowrap">${product.sellPrice}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">KES{product.buyPrice}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">KES{product.sellPrice}</td>
                       <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '700', color: product.stockQuantity < 5 ? '#ef4444' : '#10b981' }}>{product.stockQuantity}</td>
                     </tr>
                   ))}
@@ -192,7 +192,7 @@ const Reports = () => {
           </div>
           <div className="stat-card" style={{ marginBottom: '1.5rem', background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', color: 'white' }}>
             <div style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '0.25rem' }}>Total Repair Income</div>
-            <div style={{ fontSize: '2rem', fontWeight: '700' }}>${repairIncome.totalIncome.toFixed(2)}</div>
+            <div style={{ fontSize: '2rem', fontWeight: '700' }}>KES{repairIncome.totalIncome.toFixed(2)}</div>
           </div>
           {repairIncome.repairs.length === 0 ? (
             <div className="empty-state">
@@ -216,11 +216,11 @@ const Reports = () => {
                       <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{repair.customerName}</td>
                       <td className="px-4 py-3 whitespace-nowrap">{repair.device}</td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className={`badge badge-${repair.status.toLowerCase().replace(' ', '-')}`}>
+                        <span className={`badge badge-KES{repair.status.toLowerCase().replace(' ', '-')}`}>
                           {repair.status}
                         </span>
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>${repair.repairCost}</td>
+                      <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>KES{repair.repairCost}</td>
                     </tr>
                   ))}
                 </tbody>

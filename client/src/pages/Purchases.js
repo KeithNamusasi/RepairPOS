@@ -40,7 +40,7 @@ const Purchases = () => {
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon purchases">🛒</div>
-          <div className="stat-value">${totalPurchases.toFixed(2)}</div>
+          <div className="stat-value">KES{totalPurchases.toFixed(2)}</div>
           <div className="stat-label">Total Purchases</div>
         </div>
       </div>
@@ -106,8 +106,8 @@ const Purchases = () => {
                     <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{purchase.productName}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{purchase.supplier}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{purchase.quantity}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">${purchase.buyingPrice}</td>
-                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>${purchase.totalCost}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">KES{purchase.buyingPrice}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>KES{purchase.totalCost}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{new Date(purchase.date).toLocaleDateString()}</td>
                   </tr>
                 ))}

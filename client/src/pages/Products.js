@@ -117,8 +117,8 @@ const Products = () => {
                   <tr key={product._id}>
                     <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{product.name}</td>
                     <td className="px-4 py-3 whitespace-nowrap"><span style={{ background: '#e0e7ff', color: '#4338ca', padding: '0.25rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>{product.category}</span></td>
-                    <td className="px-4 py-3 whitespace-nowrap">${product.buyPrice}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">${product.sellPrice}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">KES {product.buyPrice}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">KES {product.sellPrice}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span style={{ 
                         color: product.stockQuantity < 5 ? '#ef4444' : '#10b981',

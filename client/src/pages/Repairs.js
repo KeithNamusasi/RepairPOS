@@ -58,7 +58,7 @@ const Repairs = () => {
         </div>
         <div className="stat-card">
           <div className="stat-icon profit">💵</div>
-          <div className="stat-value">${totalIncome.toFixed(2)}</div>
+          <div className="stat-value">KES{totalIncome.toFixed(2)}</div>
           <div className="stat-label">Total Income</div>
         </div>
       </div>
@@ -76,7 +76,7 @@ const Repairs = () => {
               <input type="text" placeholder="Customer Name" value={formData.customerName} onChange={e => setFormData({...formData, customerName: e.target.value})} className="form-input" required />
               <input type="text" placeholder="Phone Number" value={formData.phoneNumber} onChange={e => setFormData({...formData, phoneNumber: e.target.value})} className="form-input" required />
               <input type="text" placeholder="Device (e.g. iPhone 12)" value={formData.device} onChange={e => setFormData({...formData, device: e.target.value})} className="form-input" required />
-              <input type="number" placeholder="Repair Cost ($)" value={formData.repairCost} onChange={e => setFormData({...formData, repairCost: e.target.value})} className="form-input" required />
+              <input type="number" placeholder="Repair Cost (KES)" value={formData.repairCost} onChange={e => setFormData({...formData, repairCost: e.target.value})} className="form-input" required />
             </div>
             <div className="form-group">
               <textarea placeholder="Problem Description" value={formData.problemDescription} onChange={e => setFormData({...formData, problemDescription: e.target.value})} className="form-textarea" rows="3" required />
@@ -114,9 +114,9 @@ const Repairs = () => {
                     <td className="px-4 py-3 whitespace-nowrap">{repair.phoneNumber}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{repair.device}</td>
                     <td className="px-4 py-3 whitespace-nowrap" style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{repair.problemDescription}</td>
-                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>${repair.repairCost}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>KES{repair.repairCost}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className={`badge badge-${repair.status.toLowerCase().replace(' ', '-')}`}>
+                      <span className={`badge badge-KES{repair.status.toLowerCase().replace(' ', '-')}`}>
                         {repair.status}
                       </span>
                     </td>

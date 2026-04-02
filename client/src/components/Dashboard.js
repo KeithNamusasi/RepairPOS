@@ -52,8 +52,8 @@ const Dashboard = () => {
             </div>
             <div className="stat-value">
               {typeof stat.value === 'number' ? 
-                (stat.value > 1000 ? `$${stat.value.toFixed(0)}` : stat.value) : 
-                '$0'}
+                (stat.value > 1000 ? `KES ${stat.value.toFixed(0)}` : stat.value) : 
+                'KES 0'}
             </div>
             <div className="stat-label">{stat.label}</div>
           </div>
