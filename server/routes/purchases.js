@@ -2,23 +2,25 @@ const express = require('express');
 const router = express.Router();
 const Purchase = require('../models/Purchase');
 const Product = require('../models/Product');
+const auth = require('../middleware/auth');
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
-    const purchases = await Purchase.find().sort({ date: -1 });
+    const purchases = await Purchase.find({ user: req.userId }).sort({ date: -1 });
     res.json(purchases);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
     const { productId, productName, supplier, quantity, buyingPrice } = req.body;
 
     const totalCost = quantity * buyingPrice;
 
     const purchase = new Purchase({
+      user: req.userId,
       productId,
       productName,
       supplier,
@@ -30,7 +32,7 @@ router.post('/', async (req, res) => {
     await purchase.save();
 
     if (productId) {
-      const product = await Product.findById(productId);
+      const product = await Product.findOne({ _id: productId, user: req.userId });
       if (product) {
         product.stockQuantity += quantity;
         product.buyPrice = buyingPrice;

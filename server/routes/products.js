@@ -1,19 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const auth = require('../middleware/auth');
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await Product.find({ user: req.userId }).sort({ createdAt: -1 });
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
-    const product = new Product(req.body);
+    const product = new Product({ ...req.body, user: req.userId });
     const savedProduct = await product.save();
     res.status(201).json(savedProduct);
   } catch (error) {
@@ -21,10 +22,10 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
+    const product = await Product.findOneAndUpdate(
+      { _id: req.params.id, user: req.userId },
       req.body,
       { new: true, runValidators: true }
     );
@@ -35,9 +36,9 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findOneAndDelete({ _id: req.params.id, user: req.userId });
     if (!product) return res.status(404).json({ message: 'Product not found' });
     res.json({ message: 'Product deleted' });
   } catch (error) {

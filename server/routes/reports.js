@@ -5,15 +5,18 @@ const Purchase = require('../models/Purchase');
 const Repair = require('../models/Repair');
 const Product = require('../models/Product');
 const Savings = require('../models/Savings');
+const auth = require('../middleware/auth');
 
-router.get('/summary', async (req, res) => {
+router.get('/summary', auth, async (req, res) => {
   try {
+    const userId = req.userId;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     const todaySales = await Sale.find({
+      user: userId,
       date: { $gte: today, $lt: tomorrow }
     });
 
@@ -21,20 +24,23 @@ router.get('/summary', async (req, res) => {
     const profitToday = todaySales.reduce((sum, s) => sum + s.profit, 0);
 
     const totalPurchases = await Purchase.aggregate([
+      { $match: { user: userId } },
       { $group: { _id: null, total: { $sum: '$totalCost' } } }
     ]);
 
     const totalRepairs = await Repair.aggregate([
+      { $match: { user: userId } },
       { $group: { _id: null, total: { $sum: '$repairCost' } } }
     ]);
 
-    const pendingRepairs = await Repair.countDocuments({ status: 'Pending' });
+    const pendingRepairs = await Repair.countDocuments({ user: userId, status: 'Pending' });
 
-    const products = await Product.find();
+    const products = await Product.find({ user: userId });
     const totalProducts = products.length;
     const lowStock = products.filter(p => p.stockQuantity < 5).length;
 
     const totalSavings = await Savings.aggregate([
+      { $match: { user: userId } },
       { $group: { _id: null, total: { $sum: '$amount' } } }
     ]);
 
@@ -53,8 +59,9 @@ router.get('/summary', async (req, res) => {
   }
 });
 
-router.get('/sales/daily', async (req, res) => {
+router.get('/sales/daily', auth, async (req, res) => {
   try {
+    const userId = req.userId;
     const { date } = req.query;
     const startDate = new Date(date || new Date());
     startDate.setHours(0, 0, 0, 0);
@@ -62,6 +69,7 @@ router.get('/sales/daily', async (req, res) => {
     endDate.setDate(endDate.getDate() + 1);
 
     const sales = await Sale.find({
+      user: userId,
       date: { $gte: startDate, $lt: endDate }
     }).sort({ date: -1 });
 
@@ -74,14 +82,16 @@ router.get('/sales/daily', async (req, res) => {
   }
 });
 
-router.get('/sales/monthly', async (req, res) => {
+router.get('/sales/monthly', auth, async (req, res) => {
   try {
+    const userId = req.userId;
     const { month, year } = req.query;
     const startDate = new Date(year || new Date().getFullYear(), (month || new Date().getMonth()), 1);
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + 1);
 
     const sales = await Sale.find({
+      user: userId,
       date: { $gte: startDate, $lt: endDate }
     });
 
@@ -94,18 +104,18 @@ router.get('/sales/monthly', async (req, res) => {
   }
 });
 
-router.get('/products/stock', async (req, res) => {
+router.get('/products/stock', auth, async (req, res) => {
   try {
-    const products = await Product.find().sort({ stockQuantity: 1 });
+    const products = await Product.find({ user: req.userId }).sort({ stockQuantity: 1 });
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get('/repairs/income', async (req, res) => {
+router.get('/repairs/income', auth, async (req, res) => {
   try {
-    const repairs = await Repair.find({ status: 'Completed' });
+    const repairs = await Repair.find({ user: req.userId, status: 'Completed' });
     const totalIncome = repairs.reduce((sum, r) => sum + r.repairCost, 0);
     res.json({ repairs, totalIncome });
   } catch (error) {

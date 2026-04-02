@@ -1,19 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const Repair = require('../models/Repair');
+const auth = require('../middleware/auth');
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
-    const repairs = await Repair.find().sort({ dateReceived: -1 });
+    const repairs = await Repair.find({ user: req.userId }).sort({ dateReceived: -1 });
     res.json(repairs);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
-    const repair = new Repair(req.body);
+    const repair = new Repair({ ...req.body, user: req.userId });
     const savedRepair = await repair.save();
     res.status(201).json(savedRepair);
   } catch (error) {
@@ -21,7 +22,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   try {
     const { status, dateCompleted } = req.body;
     const updateData = { ...req.body };
@@ -30,8 +31,8 @@ router.put('/:id', async (req, res) => {
       updateData.dateCompleted = new Date();
     }
     
-    const repair = await Repair.findByIdAndUpdate(
-      req.params.id,
+    const repair = await Repair.findOneAndUpdate(
+      { _id: req.params.id, user: req.userId },
       updateData,
       { new: true, runValidators: true }
     );
