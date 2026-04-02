@@ -24,10 +24,13 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${token}`
         }
       });
+      console.log('fetchUser response:', res.status);
       const data = await res.json();
+      console.log('fetchUser data:', data);
       if (res.ok) {
         setUser(data.user);
       } else {
+        console.log('fetchUser failed, logging out');
         logout();
       }
     } catch (error) {
