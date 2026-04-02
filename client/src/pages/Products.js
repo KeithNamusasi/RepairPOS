@@ -51,67 +51,93 @@ const Products = () => {
   );
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Products</h1>
-        <button
-          onClick={() => { setShowForm(!showForm); setEditingProduct(null); setFormData({ name: '', category: '', buyPrice: '', sellPrice: '', stockQuantity: '', supplier: '' }); }}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          {showForm ? 'Cancel' : 'Add Product'}
-        </button>
+    <div>
+      <div className="page-header">
+        <h1 className="page-title">Products</h1>
+        <p className="page-subtitle">Manage your product inventory</p>
       </div>
 
-      {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow mb-4 grid grid-cols-2 gap-4">
-          <input type="text" placeholder="Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="border p-2 rounded" required />
-          <input type="text" placeholder="Category" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="border p-2 rounded" required />
-          <input type="number" placeholder="Buy Price" value={formData.buyPrice} onChange={e => setFormData({...formData, buyPrice: e.target.value})} className="border p-2 rounded" required />
-          <input type="number" placeholder="Sell Price" value={formData.sellPrice} onChange={e => setFormData({...formData, sellPrice: e.target.value})} className="border p-2 rounded" required />
-          <input type="number" placeholder="Stock Quantity" value={formData.stockQuantity} onChange={e => setFormData({...formData, stockQuantity: e.target.value})} className="border p-2 rounded" required />
-          <input type="text" placeholder="Supplier" value={formData.supplier} onChange={e => setFormData({...formData, supplier: e.target.value})} className="border p-2 rounded" />
-          <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded col-span-2">{editingProduct ? 'Update' : 'Add'} Product</button>
-        </form>
-      )}
+      <div className="card">
+        <div className="card-header">
+          <button
+            onClick={() => { setShowForm(!showForm); setEditingProduct(null); setFormData({ name: '', category: '', buyPrice: '', sellPrice: '', stockQuantity: '', supplier: '' }); }}
+            className="btn btn-primary"
+          >
+            {showForm ? '✕ Cancel' : '+ Add Product'}
+          </button>
+        </div>
 
-      <input
-        type="text"
-        placeholder="Search products..."
-        value={searchTerm}
-        onChange={e => setSearchTerm(e.target.value)}
-        className="border p-2 rounded w-full mb-4"
-      />
+        {showForm && (
+          <form onSubmit={handleSubmit} style={{ marginBottom: '1.5rem', padding: '1.5rem', background: '#f9fafb', borderRadius: '12px' }}>
+            <div className="form-row">
+              <input type="text" placeholder="Product Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input" required />
+              <input type="text" placeholder="Category" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="form-input" required />
+              <input type="number" placeholder="Buy Price" value={formData.buyPrice} onChange={e => setFormData({...formData, buyPrice: e.target.value})} className="form-input" required />
+              <input type="number" placeholder="Sell Price" value={formData.sellPrice} onChange={e => setFormData({...formData, sellPrice: e.target.value})} className="form-input" required />
+              <input type="number" placeholder="Stock Quantity" value={formData.stockQuantity} onChange={e => setFormData({...formData, stockQuantity: e.target.value})} className="form-input" required />
+              <input type="text" placeholder="Supplier" value={formData.supplier} onChange={e => setFormData({...formData, supplier: e.target.value})} className="form-input" />
+            </div>
+            <button type="submit" className="btn btn-primary" style={{ marginTop: '1rem' }}>
+              {editingProduct ? 'Update Product' : 'Add Product'}
+            </button>
+          </form>
+        )}
 
-      <div className="overflow-x-auto">
-        <table className="w-full bg-white shadow rounded">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-3 text-left">Name</th>
-              <th className="p-3 text-left">Category</th>
-              <th className="p-3 text-left">Buy</th>
-              <th className="p-3 text-left">Sell</th>
-              <th className="p-3 text-left">Stock</th>
-              <th className="p-3 text-left">Supplier</th>
-              <th className="p-3 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProducts.map(product => (
-              <tr key={product._id} className="border-t hover:bg-gray-50">
-                <td className="p-3">{product.name}</td>
-                <td className="p-3">{product.category}</td>
-                <td className="p-3">${product.buyPrice}</td>
-                <td className="p-3">${product.sellPrice}</td>
-                <td className="p-3">{product.stockQuantity}</td>
-                <td className="p-3">{product.supplier}</td>
-                <td className="p-3">
-                  <button onClick={() => handleEdit(product)} className="text-blue-600 mr-2">Edit</button>
-                  <button onClick={() => handleDelete(product._id)} className="text-red-600">Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="search-bar">
+          <span>🔍</span>
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        {filteredProducts.length === 0 ? (
+          <div className="empty-state">
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📦</div>
+            <p>No products found</p>
+          </div>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Buy</th>
+                  <th>Sell</th>
+                  <th>Stock</th>
+                  <th>Supplier</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProducts.map(product => (
+                  <tr key={product._id}>
+                    <td style={{ fontWeight: '500' }}>{product.name}</td>
+                    <td><span style={{ background: '#e0e7ff', color: '#4338ca', padding: '0.25rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>{product.category}</span></td>
+                    <td>${product.buyPrice}</td>
+                    <td>${product.sellPrice}</td>
+                    <td>
+                      <span style={{ 
+                        color: product.stockQuantity < 5 ? '#ef4444' : '#10b981',
+                        fontWeight: '600'
+                      }}>
+                        {product.stockQuantity}
+                      </span>
+                    </td>
+                    <td>{product.supplier || '-'}</td>
+                    <td>
+                      <button onClick={() => handleEdit(product)} style={{ marginRight: '0.5rem', color: '#6366f1', background: 'none', border: 'none', cursor: 'pointer' }}>✏️ Edit</button>
+                      <button onClick={() => handleDelete(product._id)} style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>🗑️</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

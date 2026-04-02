@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
@@ -6,6 +6,7 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -13,36 +14,55 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { path: '/dashboard', label: 'Dashboard' },
-    { path: '/products', label: 'Products' },
-    { path: '/sales', label: 'Sales' },
-    { path: '/purchases', label: 'Purchases' },
-    { path: '/repairs', label: 'Repairs' },
-    { path: '/savings', label: 'Savings' },
-    { path: '/reports', label: 'Reports' },
+    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
+    { path: '/products', label: 'Products', icon: '📦' },
+    { path: '/sales', label: 'Sales', icon: '💰' },
+    { path: '/purchases', label: 'Purchases', icon: '🛒' },
+    { path: '/repairs', label: 'Repairs', icon: '🔧' },
+    { path: '/savings', label: 'Savings', icon: '💎' },
+    { path: '/reports', label: 'Reports', icon: '📈' },
   ];
 
   return (
-    <div className="sidebar">
-      <Link to="/" className="sidebar-brand">RepairPOS</Link>
-      <nav>
-        {navItems.map(item => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={location.pathname === item.path ? 'active' : ''}
-          >
-            <span>{item.label}</span>
-          </Link>
-        ))}
-      </nav>
-      <div className="sidebar-user">
-        <div>{user?.username}</div>
-        <button onClick={handleLogout} className="btn btn-small sidebar-logout">
-          Sign Out
-        </button>
+    <>
+      <button className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? '✕' : '☰'}
+      </button>
+      <div className={`overlay ${isOpen ? 'show' : ''}`} onClick={() => setIsOpen(false)} />
+      <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+        <Link to="/" className="sidebar-brand">
+          <span>⚡</span>
+          <span className="brand-text">RepairPOS</span>
+        </Link>
+        <nav>
+          {navItems.map(item => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={location.pathname === item.path ? 'active' : ''}
+              onClick={() => setIsOpen(false)}
+            >
+              <span>{item.icon}</span>
+              <span className="nav-label">{item.label}</span>
+            </Link>
+          ))}
+        </nav>
+        <div className="sidebar-user">
+          <div className="sidebar-user-info">
+            <div className="sidebar-avatar">
+              {user?.username?.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <div className="sidebar-user-name">{user?.username}</div>
+              <div className="sidebar-user-role">{user?.role || 'Staff'}</div>
+            </div>
+          </div>
+          <button onClick={handleLogout} className="sidebar-logout">
+            Sign Out
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

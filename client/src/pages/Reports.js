@@ -27,142 +27,211 @@ const Reports = () => {
     setRepairIncome(repairData);
   };
 
-  if (!summary) return <div className="p-4">Loading...</div>;
+  if (!summary) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+      <div style={{ color: 'white' }}>Loading...</div>
+    </div>
+  );
+
+  const tabs = [
+    { id: 'summary', label: '📊 Summary', icon: '📊' },
+    { id: 'daily', label: '📅 Daily Sales', icon: '📅' },
+    { id: 'stock', label: '📦 Stock', icon: '📦' },
+    { id: 'repairs', label: '🔧 Repairs', icon: '🔧' },
+  ];
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Reports</h1>
+    <div>
+      <div className="page-header">
+        <h1 className="page-title">Reports</h1>
+        <p className="page-subtitle">View business analytics and insights</p>
+      </div>
 
-      <div className="flex gap-2 mb-4">
-        {['summary', 'daily', 'stock', 'repairs'].map(tab => (
+      <div className="tabs">
+        {tabs.map(tab => (
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded ${activeTab === tab ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`tab ${activeTab === tab.id ? 'active' : ''}`}
           >
-            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            {tab.label}
           </button>
         ))}
       </div>
 
       {activeTab === 'summary' && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-green-100 p-4 rounded">
-            <p className="text-sm text-gray-600">Today's Sales</p>
-            <p className="text-2xl font-bold">${summary.totalSalesToday.toFixed(2)}</p>
+        <div className="stats-grid">
+          <div className="stat-card">
+            <div className="stat-icon sales">💰</div>
+            <div className="stat-value">${summary.totalSalesToday.toFixed(2)}</div>
+            <div className="stat-label">Today's Sales</div>
           </div>
-          <div className="bg-blue-100 p-4 rounded">
-            <p className="text-sm text-gray-600">Today's Profit</p>
-            <p className="text-2xl font-bold">${summary.profitToday.toFixed(2)}</p>
+          <div className="stat-card">
+            <div className="stat-icon profit">📈</div>
+            <div className="stat-value">${summary.profitToday.toFixed(2)}</div>
+            <div className="stat-label">Today's Profit</div>
           </div>
-          <div className="bg-orange-100 p-4 rounded">
-            <p className="text-sm text-gray-600">Total Purchases</p>
-            <p className="text-2xl font-bold">${summary.totalPurchases.toFixed(2)}</p>
+          <div className="stat-card">
+            <div className="stat-icon purchases">🛒</div>
+            <div className="stat-value">${summary.totalPurchases.toFixed(2)}</div>
+            <div className="stat-label">Total Purchases</div>
           </div>
-          <div className="bg-purple-100 p-4 rounded">
-            <p className="text-sm text-gray-600">Repair Income</p>
-            <p className="text-2xl font-bold">${summary.totalRepairIncome.toFixed(2)}</p>
+          <div className="stat-card">
+            <div className="stat-icon repairs">🔧</div>
+            <div className="stat-value">${summary.totalRepairIncome.toFixed(2)}</div>
+            <div className="stat-label">Repair Income</div>
           </div>
-          <div className="bg-yellow-100 p-4 rounded">
-            <p className="text-sm text-gray-600">Total Products</p>
-            <p className="text-2xl font-bold">{summary.totalProducts}</p>
+          <div className="stat-card">
+            <div className="stat-icon products">📦</div>
+            <div className="stat-value">{summary.totalProducts}</div>
+            <div className="stat-label">Total Products</div>
           </div>
-          <div className="bg-red-100 p-4 rounded">
-            <p className="text-sm text-gray-600">Low Stock</p>
-            <p className="text-2xl font-bold">{summary.lowStock}</p>
+          <div className="stat-card">
+            <div className="stat-icon stock">⚠️</div>
+            <div className="stat-value">{summary.lowStock}</div>
+            <div className="stat-label">Low Stock Items</div>
           </div>
-          <div className="bg-gray-100 p-4 rounded">
-            <p className="text-sm text-gray-600">Pending Repairs</p>
-            <p className="text-2xl font-bold">{summary.pendingRepairs}</p>
+          <div className="stat-card">
+            <div className="stat-icon pending">⏳</div>
+            <div className="stat-value">{summary.pendingRepairs}</div>
+            <div className="stat-label">Pending Repairs</div>
           </div>
-          <div className="bg-green-200 p-4 rounded">
-            <p className="text-sm text-gray-600">Total Savings</p>
-            <p className="text-2xl font-bold">${summary.totalSavings.toFixed(2)}</p>
+          <div className="stat-card">
+            <div className="stat-icon savings">💎</div>
+            <div className="stat-value">${summary.totalSavings.toFixed(2)}</div>
+            <div className="stat-label">Total Savings</div>
           </div>
         </div>
       )}
 
       {activeTab === 'daily' && (
-        <div>
-          <div className="bg-green-100 p-4 rounded mb-4">
-            <p className="text-sm text-gray-600">Today's Total</p>
-            <p className="text-2xl font-bold">${dailySales.total.toFixed(2)}</p>
-            <p className="text-green-600">Profit: ${dailySales.profit.toFixed(2)}</p>
+        <div className="card">
+          <div className="card-header">
+            <h2 className="card-title">📅 Today's Sales</h2>
           </div>
-          <table className="w-full bg-white shadow rounded">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="p-3 text-left">Product</th>
-                <th className="p-3 text-left">Qty</th>
-                <th className="p-3 text-left">Total</th>
-                <th className="p-3 text-left">Profit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dailySales.sales.map(sale => (
-                <tr key={sale._id} className="border-t">
-                  <td className="p-3">{sale.productName}</td>
-                  <td className="p-3">{sale.quantity}</td>
-                  <td className="p-3">${sale.total}</td>
-                  <td className="p-3 text-green-600">${sale.profit}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="stat-card" style={{ marginBottom: '1.5rem', background: 'linear-gradient(135deg, #10b981, #059669)', color: 'white' }}>
+            <div style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '0.25rem' }}>Total Revenue</div>
+            <div style={{ fontSize: '2rem', fontWeight: '700' }}>${dailySales.total.toFixed(2)}</div>
+            <div style={{ marginTop: '0.5rem', color: 'rgba(255,255,255,0.9)' }}>📈 Profit: ${dailySales.profit.toFixed(2)}</div>
+          </div>
+          {dailySales.sales.length === 0 ? (
+            <div className="empty-state">
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📊</div>
+              <p>No sales today</p>
+            </div>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Profit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dailySales.sales.map(sale => (
+                    <tr key={sale._id}>
+                      <td style={{ fontWeight: '500' }}>{sale.productName}</td>
+                      <td>{sale.quantity}</td>
+                      <td style={{ fontWeight: '600' }}>${sale.total}</td>
+                      <td style={{ color: '#10b981', fontWeight: '600' }}>+${sale.profit}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
 
       {activeTab === 'stock' && (
-        <table className="w-full bg-white shadow rounded">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-3 text-left">Product</th>
-              <th className="p-3 text-left">Category</th>
-              <th className="p-3 text-left">Buy Price</th>
-              <th className="p-3 text-left">Sell Price</th>
-              <th className="p-3 text-left">Stock</th>
-            </tr>
-          </thead>
-          <tbody>
-            {productStock.map(product => (
-              <tr key={product._id} className={`border-t ${product.stockQuantity < 5 ? 'bg-red-50' : ''}`}>
-                <td className="p-3">{product.name}</td>
-                <td className="p-3">{product.category}</td>
-                <td className="p-3">${product.buyPrice}</td>
-                <td className="p-3">${product.sellPrice}</td>
-                <td className="p-3 font-bold">{product.stockQuantity}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="card">
+          <div className="card-header">
+            <h2 className="card-title">📦 Product Stock</h2>
+          </div>
+          {productStock.length === 0 ? (
+            <div className="empty-state">
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📦</div>
+              <p>No products found</p>
+            </div>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Buy</th>
+                    <th>Sell</th>
+                    <th>Stock</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {productStock.map(product => (
+                    <tr key={product._id} style={product.stockQuantity < 5 ? { background: '#fef2f2' } : {}}>
+                      <td style={{ fontWeight: '500' }}>{product.name}</td>
+                      <td><span style={{ background: '#e0e7ff', color: '#4338ca', padding: '0.25rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>{product.category}</span></td>
+                      <td>${product.buyPrice}</td>
+                      <td>${product.sellPrice}</td>
+                      <td style={{ 
+                        fontWeight: '700', 
+                        color: product.stockQuantity < 5 ? '#ef4444' : '#10b981' 
+                      }}>
+                        {product.stockQuantity}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       )}
 
       {activeTab === 'repairs' && repairIncome && (
-        <div>
-          <div className="bg-purple-100 p-4 rounded mb-4">
-            <p className="text-sm text-gray-600">Total Repair Income</p>
-            <p className="text-2xl font-bold">${repairIncome.totalIncome.toFixed(2)}</p>
+        <div className="card">
+          <div className="card-header">
+            <h2 className="card-title">🔧 Repair Jobs</h2>
           </div>
-          <table className="w-full bg-white shadow rounded">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="p-3 text-left">Customer</th>
-                <th className="p-3 text-left">Device</th>
-                <th className="p-3 text-left">Status</th>
-                <th className="p-3 text-left">Cost</th>
-              </tr>
-            </thead>
-            <tbody>
-              {repairIncome.repairs.map(repair => (
-                <tr key={repair._id} className="border-t">
-                  <td className="p-3">{repair.customerName}</td>
-                  <td className="p-3">{repair.device}</td>
-                  <td className="p-3">{repair.status}</td>
-                  <td className="p-3">${repair.repairCost}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="stat-card" style={{ marginBottom: '1.5rem', background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', color: 'white' }}>
+            <div style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '0.25rem' }}>Total Repair Income</div>
+            <div style={{ fontSize: '2rem', fontWeight: '700' }}>${repairIncome.totalIncome.toFixed(2)}</div>
+          </div>
+          {repairIncome.repairs.length === 0 ? (
+            <div className="empty-state">
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔧</div>
+              <p>No repair jobs found</p>
+            </div>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Device</th>
+                    <th>Status</th>
+                    <th>Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {repairIncome.repairs.map(repair => (
+                    <tr key={repair._id}>
+                      <td style={{ fontWeight: '500' }}>{repair.customerName}</td>
+                      <td>{repair.device}</td>
+                      <td>
+                        <span className={`badge badge-${repair.status.toLowerCase().replace(' ', '-')}`}>
+                          {repair.status}
+                        </span>
+                      </td>
+                      <td style={{ fontWeight: '600' }}>${repair.repairCost}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
     </div>

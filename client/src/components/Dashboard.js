@@ -20,44 +20,78 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) return <div className="p-4">Loading...</div>;
+  if (loading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+      <div style={{ textAlign: 'center', color: 'white' }}>Loading...</div>
+    </div>
+  );
+
+  const statCards = [
+    { label: "Today's Sales", value: stats?.totalSalesToday, icon: '💰', color: 'sales' },
+    { label: "Today's Profit", value: stats?.profitToday, icon: '📈', color: 'profit' },
+    { label: 'Total Products', value: stats?.totalProducts, icon: '📦', color: 'products' },
+    { label: 'Low Stock', value: stats?.lowStock, icon: '⚠️', color: 'stock' },
+    { label: 'Pending Repairs', value: stats?.pendingRepairs, icon: '🔧', color: 'pending' },
+    { label: 'Total Savings', value: stats?.totalSavings, icon: '💎', color: 'savings' },
+    { label: 'Purchases', value: stats?.totalPurchases, icon: '🛒', color: 'purchases' },
+    { label: 'Repair Income', value: stats?.totalRepairIncome, icon: '💵', color: 'repairs' },
+  ];
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-green-100 p-4 rounded shadow">
-          <p className="text-sm text-gray-600">Today's Sales</p>
-          <p className="text-2xl font-bold">${stats?.totalSalesToday?.toFixed(2) || '0.00'}</p>
+    <div>
+      <div className="page-header">
+        <h1 className="page-title">Dashboard</h1>
+        <p className="page-subtitle">Welcome back! Here's your shop overview.</p>
+      </div>
+
+      <div className="stats-grid">
+        {statCards.map((stat, index) => (
+          <div key={index} className="stat-card">
+            <div className={`stat-icon ${stat.color}`}>
+              {stat.icon}
+            </div>
+            <div className="stat-value">
+              {typeof stat.value === 'number' ? 
+                (stat.value > 1000 ? `$${stat.value.toFixed(0)}` : stat.value) : 
+                '$0'}
+            </div>
+            <div className="stat-label">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="card">
+        <div className="card-header">
+          <h2 className="card-title">Quick Actions</h2>
         </div>
-        <div className="bg-blue-100 p-4 rounded shadow">
-          <p className="text-sm text-gray-600">Today's Profit</p>
-          <p className="text-2xl font-bold">${stats?.profitToday?.toFixed(2) || '0.00'}</p>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <a href="/sales" className="btn btn-primary">💰 New Sale</a>
+          <a href="/products" className="btn btn-secondary">📦 Add Product</a>
+          <a href="/repairs" className="btn btn-secondary">🔧 New Repair</a>
+          <a href="/reports" className="btn btn-secondary">📊 View Reports</a>
         </div>
-        <div className="bg-orange-100 p-4 rounded shadow">
-          <p className="text-sm text-gray-600">Total Purchases</p>
-          <p className="text-2xl font-bold">${stats?.totalPurchases?.toFixed(2) || '0.00'}</p>
+      </div>
+
+      <div className="card">
+        <div className="card-header">
+          <h2 className="card-title">Shop Status</h2>
         </div>
-        <div className="bg-purple-100 p-4 rounded shadow">
-          <p className="text-sm text-gray-600">Repair Income</p>
-          <p className="text-2xl font-bold">${stats?.totalRepairIncome?.toFixed(2) || '0.00'}</p>
-        </div>
-        <div className="bg-yellow-100 p-4 rounded shadow">
-          <p className="text-sm text-gray-600">Total Products</p>
-          <p className="text-2xl font-bold">{stats?.totalProducts || 0}</p>
-        </div>
-        <div className="bg-red-100 p-4 rounded shadow">
-          <p className="text-sm text-gray-600">Low Stock</p>
-          <p className="text-2xl font-bold">{stats?.lowStock || 0}</p>
-        </div>
-        <div className="bg-gray-100 p-4 rounded shadow">
-          <p className="text-sm text-gray-600">Pending Repairs</p>
-          <p className="text-2xl font-bold">{stats?.pendingRepairs || 0}</p>
-        </div>
-        <div className="bg-teal-100 p-4 rounded shadow">
-          <p className="text-sm text-gray-600">Total Savings</p>
-          <p className="text-2xl font-bold">${stats?.totalSavings?.toFixed(2) || '0.00'}</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+          <div style={{ padding: '1rem', background: '#f0fdf4', borderRadius: '12px' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>✅</div>
+            <div style={{ fontWeight: '600', color: '#166534' }}>Business Running</div>
+            <div style={{ fontSize: '0.875rem', color: '#15803d' }}>All systems operational</div>
+          </div>
+          <div style={{ padding: '1rem', background: '#fef3c7', borderRadius: '12px' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📦</div>
+            <div style={{ fontWeight: '600', color: '#92400e' }}>Inventory Status</div>
+            <div style={{ fontSize: '0.875rem', color: '#b45309' }}>{stats?.totalProducts || 0} products in stock</div>
+          </div>
+          <div style={{ padding: '1rem', background: '#f3e8ff', borderRadius: '12px' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔧</div>
+            <div style={{ fontWeight: '600', color: '#7c3aed' }}>Repairs</div>
+            <div style={{ fontSize: '0.875rem', color: '#6d28d9' }}>{stats?.pendingRepairs || 0} pending repairs</div>
+          </div>
         </div>
       </div>
     </div>
