@@ -14,7 +14,8 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://sangalo-mriy.onrender.com'
+    'https://sangalo-mriy.onrender.com',
+    'https://backend-vgzn.onrender.com'
   ],
   credentials: true
 }));
