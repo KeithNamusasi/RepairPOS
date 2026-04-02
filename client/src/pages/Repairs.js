@@ -93,35 +93,35 @@ const Repairs = () => {
             <p>No repair jobs yet</p>
           </div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table>
+          <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+            <table className="w-max min-w-full text-sm">
               <thead>
                 <tr>
-                  <th>Customer</th>
-                  <th>Phone</th>
-                  <th>Device</th>
-                  <th>Problem</th>
-                  <th>Cost</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th>Actions</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Customer</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Phone</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Device</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Problem</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Cost</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Status</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Date</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {repairs.map(repair => (
                   <tr key={repair._id}>
-                    <td style={{ fontWeight: '500' }}>{repair.customerName}</td>
-                    <td>{repair.phoneNumber}</td>
-                    <td>{repair.device}</td>
-                    <td style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{repair.problemDescription}</td>
-                    <td style={{ fontWeight: '600' }}>${repair.repairCost}</td>
-                    <td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{repair.customerName}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{repair.phoneNumber}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{repair.device}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{repair.problemDescription}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>${repair.repairCost}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <span className={`badge badge-${repair.status.toLowerCase().replace(' ', '-')}`}>
                         {repair.status}
                       </span>
                     </td>
-                    <td>{new Date(repair.dateReceived).toLocaleDateString()}</td>
-                    <td>
+                    <td className="px-4 py-3 whitespace-nowrap">{new Date(repair.dateReceived).toLocaleDateString()}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <select
                         value={repair.status}
                         onChange={e => handleStatusChange(repair._id, e.target.value)}

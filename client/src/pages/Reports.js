@@ -120,23 +120,23 @@ const Reports = () => {
               <p>No sales today</p>
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table>
+            <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+              <table className="w-max min-w-full text-sm">
                 <thead>
                   <tr>
-                    <th>Product</th>
-                    <th>Qty</th>
-                    <th>Total</th>
-                    <th>Profit</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Product</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Qty</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Total</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Profit</th>
                   </tr>
                 </thead>
                 <tbody>
                   {dailySales.sales.map(sale => (
                     <tr key={sale._id}>
-                      <td style={{ fontWeight: '500' }}>{sale.productName}</td>
-                      <td>{sale.quantity}</td>
-                      <td style={{ fontWeight: '600' }}>${sale.total}</td>
-                      <td style={{ color: '#10b981', fontWeight: '600' }}>+${sale.profit}</td>
+                      <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{sale.productName}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">{sale.quantity}</td>
+                      <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>${sale.total}</td>
+                      <td className="px-4 py-3 whitespace-nowrap" style={{ color: '#10b981', fontWeight: '600' }}>+${sale.profit}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -157,30 +157,25 @@ const Reports = () => {
               <p>No products found</p>
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table>
+            <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+              <table className="w-max min-w-full text-sm">
                 <thead>
                   <tr>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Buy</th>
-                    <th>Sell</th>
-                    <th>Stock</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Product</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Category</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Buy</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Sell</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Stock</th>
                   </tr>
                 </thead>
                 <tbody>
                   {productStock.map(product => (
                     <tr key={product._id} style={product.stockQuantity < 5 ? { background: '#fef2f2' } : {}}>
-                      <td style={{ fontWeight: '500' }}>{product.name}</td>
-                      <td><span style={{ background: '#e0e7ff', color: '#4338ca', padding: '0.25rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>{product.category}</span></td>
-                      <td>${product.buyPrice}</td>
-                      <td>${product.sellPrice}</td>
-                      <td style={{ 
-                        fontWeight: '700', 
-                        color: product.stockQuantity < 5 ? '#ef4444' : '#10b981' 
-                      }}>
-                        {product.stockQuantity}
-                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{product.name}</td>
+                      <td className="px-4 py-3 whitespace-nowrap"><span style={{ background: '#e0e7ff', color: '#4338ca', padding: '0.25rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>{product.category}</span></td>
+                      <td className="px-4 py-3 whitespace-nowrap">${product.buyPrice}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">${product.sellPrice}</td>
+                      <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '700', color: product.stockQuantity < 5 ? '#ef4444' : '#10b981' }}>{product.stockQuantity}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -205,27 +200,27 @@ const Reports = () => {
               <p>No repair jobs found</p>
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table>
+            <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+              <table className="w-max min-w-full text-sm">
                 <thead>
                   <tr>
-                    <th>Customer</th>
-                    <th>Device</th>
-                    <th>Status</th>
-                    <th>Cost</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Customer</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Device</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Status</th>
+                    <th className="px-4 py-3 text-left whitespace-nowrap">Cost</th>
                   </tr>
                 </thead>
                 <tbody>
                   {repairIncome.repairs.map(repair => (
                     <tr key={repair._id}>
-                      <td style={{ fontWeight: '500' }}>{repair.customerName}</td>
-                      <td>{repair.device}</td>
-                      <td>
+                      <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{repair.customerName}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">{repair.device}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">
                         <span className={`badge badge-${repair.status.toLowerCase().replace(' ', '-')}`}>
                           {repair.status}
                         </span>
                       </td>
-                      <td style={{ fontWeight: '600' }}>${repair.repairCost}</td>
+                      <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>${repair.repairCost}</td>
                     </tr>
                   ))}
                 </tbody>

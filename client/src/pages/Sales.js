@@ -122,33 +122,33 @@ const Sales = () => {
             <p>No sales recorded yet</p>
           </div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table>
+          <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+            <table className="w-max min-w-full text-sm">
               <thead>
                 <tr>
-                  <th>Product</th>
-                  <th>Qty</th>
-                  <th>Price</th>
-                  <th>Total</th>
-                  <th>Profit</th>
-                  <th>Payment</th>
-                  <th>Date</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Product</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Qty</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Price</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Total</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Profit</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Payment</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Date</th>
                 </tr>
               </thead>
               <tbody>
                 {sales.map(sale => (
                   <tr key={sale._id}>
-                    <td style={{ fontWeight: '500' }}>{sale.productName}</td>
-                    <td>{sale.quantity}</td>
-                    <td>${sale.sellingPrice}</td>
-                    <td style={{ fontWeight: '600' }}>${sale.total}</td>
-                    <td style={{ color: '#10b981', fontWeight: '600' }}>+${sale.profit}</td>
-                    <td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{sale.productName}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{sale.quantity}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">${sale.sellingPrice}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>${sale.total}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ color: '#10b981', fontWeight: '600' }}>+${sale.profit}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <span style={{ background: '#f3f4f6', padding: '0.25rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>
                         {sale.paymentMethod}
                       </span>
                     </td>
-                    <td>{new Date(sale.date).toLocaleDateString()}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{new Date(sale.date).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>

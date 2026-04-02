@@ -71,21 +71,21 @@ const Savings = () => {
             <p>No savings recorded yet</p>
           </div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table>
+          <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+            <table className="w-max min-w-full text-sm">
               <thead>
                 <tr>
-                  <th>Amount</th>
-                  <th>Note</th>
-                  <th>Date</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Amount</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Note</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Date</th>
                 </tr>
               </thead>
               <tbody>
                 {savings.map(saving => (
                   <tr key={saving._id}>
-                    <td style={{ fontWeight: '600', color: '#10b981', fontSize: '1.1rem' }}>+${saving.amount}</td>
-                    <td>{saving.note || '-'}</td>
-                    <td>{new Date(saving.date).toLocaleDateString()}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600', color: '#10b981', fontSize: '1.1rem' }}>+${saving.amount}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{saving.note || '-'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{new Date(saving.date).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>

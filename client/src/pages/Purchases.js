@@ -88,27 +88,27 @@ const Purchases = () => {
             <p>No purchases recorded yet</p>
           </div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table>
+          <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+            <table className="w-max min-w-full text-sm">
               <thead>
                 <tr>
-                  <th>Product</th>
-                  <th>Supplier</th>
-                  <th>Qty</th>
-                  <th>Price</th>
-                  <th>Total</th>
-                  <th>Date</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Product</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Supplier</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Qty</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Price</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Total</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Date</th>
                 </tr>
               </thead>
               <tbody>
                 {purchases.map(purchase => (
                   <tr key={purchase._id}>
-                    <td style={{ fontWeight: '500' }}>{purchase.productName}</td>
-                    <td>{purchase.supplier}</td>
-                    <td>{purchase.quantity}</td>
-                    <td>${purchase.buyingPrice}</td>
-                    <td style={{ fontWeight: '600' }}>${purchase.totalCost}</td>
-                    <td>{new Date(purchase.date).toLocaleDateString()}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{purchase.productName}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{purchase.supplier}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{purchase.quantity}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">${purchase.buyingPrice}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>${purchase.totalCost}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{new Date(purchase.date).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>

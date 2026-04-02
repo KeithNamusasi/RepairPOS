@@ -99,27 +99,27 @@ const Products = () => {
             <p>No products found</p>
           </div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table>
+          <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+            <table className="w-max min-w-full text-sm">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Buy</th>
-                  <th>Sell</th>
-                  <th>Stock</th>
-                  <th>Supplier</th>
-                  <th>Actions</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Name</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Category</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Buy</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Sell</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Stock</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Supplier</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredProducts.map(product => (
                   <tr key={product._id}>
-                    <td style={{ fontWeight: '500' }}>{product.name}</td>
-                    <td><span style={{ background: '#e0e7ff', color: '#4338ca', padding: '0.25rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>{product.category}</span></td>
-                    <td>${product.buyPrice}</td>
-                    <td>${product.sellPrice}</td>
-                    <td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{product.name}</td>
+                    <td className="px-4 py-3 whitespace-nowrap"><span style={{ background: '#e0e7ff', color: '#4338ca', padding: '0.25rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>{product.category}</span></td>
+                    <td className="px-4 py-3 whitespace-nowrap">${product.buyPrice}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">${product.sellPrice}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <span style={{ 
                         color: product.stockQuantity < 5 ? '#ef4444' : '#10b981',
                         fontWeight: '600'
@@ -127,8 +127,8 @@ const Products = () => {
                         {product.stockQuantity}
                       </span>
                     </td>
-                    <td>{product.supplier || '-'}</td>
-                    <td>
+                    <td className="px-4 py-3 whitespace-nowrap">{product.supplier || '-'}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <button onClick={() => handleEdit(product)} style={{ marginRight: '0.5rem', color: '#6366f1', background: 'none', border: 'none', cursor: 'pointer' }}>✏️ Edit</button>
                       <button onClick={() => handleDelete(product._id)} style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>🗑️</button>
                     </td>
