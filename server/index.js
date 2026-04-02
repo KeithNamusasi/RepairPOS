@@ -4,9 +4,13 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
-// MongoDB Atlas connection - use MONGO_URI env variable set in Render dashboard
-
 const authRoutes = require('./routes/auth');
+const productRoutes = require('./routes/products');
+const saleRoutes = require('./routes/sales');
+const purchaseRoutes = require('./routes/purchases');
+const repairRoutes = require('./routes/repairs');
+const savingsRoutes = require('./routes/savings');
+const reportRoutes = require('./routes/reports');
 
 const app = express();
 
@@ -24,6 +28,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/sales', saleRoutes);
+app.use('/api/purchases', purchaseRoutes);
+app.use('/api/repairs', repairRoutes);
+app.use('/api/savings', savingsRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

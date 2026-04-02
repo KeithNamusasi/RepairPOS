@@ -1,85 +1,63 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import React, { useState, useEffect } from 'react';
+import { api } from '../api';
 
 const Dashboard = () => {
-  const { user, logout, deleteAccount } = useContext(AuthContext);
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleLogout = async () => {
-    await logout();
-    navigate('/login');
-  };
+  useEffect(() => {
+    loadStats();
+  }, []);
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-
-    if (!confirmPassword) {
-      setError('Please enter your password to confirm');
-      return;
-    }
-
-    if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      return;
-    }
-
-    setLoading(true);
+  const loadStats = async () => {
     try {
-      await deleteAccount(confirmPassword);
-      navigate('/login');
-    } catch (err) {
-      setError(err.message);
+      const data = await api.reports.getSummary();
+      setStats(data);
+    } catch (error) {
+      console.error('Error loading stats:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  if (!user) {
-    return <div className="container">Loading...</div>;
-  }
+  if (loading) return <div className="p-4">Loading...</div>;
 
   return (
-    <div className="container">
-      <div className="dashboard">
-        <h1>Dashboard</h1>
-        
-        <div className="dashboard-card">
-          <h2>User Information</h2>
-          <div className="user-info">
-            <p><strong>Username:</strong> {user.username}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Account Created:</strong> {new Date(user.createdAt).toLocaleDateString()}</p>
-          </div>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-green-100 p-4 rounded shadow">
+          <p className="text-sm text-gray-600">Today's Sales</p>
+          <p className="text-2xl font-bold">${stats?.totalSalesToday?.toFixed(2) || '0.00'}</p>
         </div>
-
-        <div className="dashboard-card delete-account">
-          <h2>Delete Account</h2>
-          <div className="delete-warning">
-            Warning: Deleting your account is permanent and cannot be undone. All your data will be lost.
-          </div>
-          {error && <div className="message error">{error}</div>}
-          {success && <div className="message success">{success}</div>}
-          <form onSubmit={handleDelete}>
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Enter your password to confirm deletion</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-danger" disabled={loading}>
-              {loading ? 'Deleting...' : 'Delete My Account'}
-            </button>
-          </form>
+        <div className="bg-blue-100 p-4 rounded shadow">
+          <p className="text-sm text-gray-600">Today's Profit</p>
+          <p className="text-2xl font-bold">${stats?.profitToday?.toFixed(2) || '0.00'}</p>
+        </div>
+        <div className="bg-orange-100 p-4 rounded shadow">
+          <p className="text-sm text-gray-600">Total Purchases</p>
+          <p className="text-2xl font-bold">${stats?.totalPurchases?.toFixed(2) || '0.00'}</p>
+        </div>
+        <div className="bg-purple-100 p-4 rounded shadow">
+          <p className="text-sm text-gray-600">Repair Income</p>
+          <p className="text-2xl font-bold">${stats?.totalRepairIncome?.toFixed(2) || '0.00'}</p>
+        </div>
+        <div className="bg-yellow-100 p-4 rounded shadow">
+          <p className="text-sm text-gray-600">Total Products</p>
+          <p className="text-2xl font-bold">{stats?.totalProducts || 0}</p>
+        </div>
+        <div className="bg-red-100 p-4 rounded shadow">
+          <p className="text-sm text-gray-600">Low Stock</p>
+          <p className="text-2xl font-bold">{stats?.lowStock || 0}</p>
+        </div>
+        <div className="bg-gray-100 p-4 rounded shadow">
+          <p className="text-sm text-gray-600">Pending Repairs</p>
+          <p className="text-2xl font-bold">{stats?.pendingRepairs || 0}</p>
+        </div>
+        <div className="bg-teal-100 p-4 rounded shadow">
+          <p className="text-sm text-gray-600">Total Savings</p>
+          <p className="text-2xl font-bold">${stats?.totalSavings?.toFixed(2) || '0.00'}</p>
         </div>
       </div>
     </div>
