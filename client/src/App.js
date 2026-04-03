@@ -12,10 +12,36 @@ import Repairs from './pages/Repairs';
 import Savings from './pages/Savings';
 import Reports from './pages/Reports';
 
+const LoadingScreen = () => (
+  <div style={{
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+  }}>
+    <div style={{ textAlign: 'center', color: 'white' }}>
+      <div style={{ 
+        width: '50px', 
+        height: '50px', 
+        border: '4px solid rgba(255,255,255,0.3)',
+        borderTopColor: 'white',
+        borderRadius: '50%',
+        animation: 'spin 1s linear infinite',
+        margin: '0 auto 1rem'
+      }} />
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+      `}</style>
+      <p>Loading...</p>
+    </div>
+  </div>
+);
+
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
 
-  if (loading) return <div className="p-4">Loading...</div>;
+  if (loading) return <LoadingScreen />;
   if (!user) return <Navigate to="/login" />;
 
   return children;
@@ -31,7 +57,9 @@ const Layout = ({ children }) => (
 );
 
 const AppRoutes = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <Routes>
@@ -44,7 +72,7 @@ const AppRoutes = () => {
       <Route path="/repairs" element={<ProtectedRoute><Layout><Repairs /></Layout></ProtectedRoute>} />
       <Route path="/savings" element={<ProtectedRoute><Layout><Savings /></Layout></ProtectedRoute>} />
       <Route path="/reports" element={<ProtectedRoute><Layout><Reports /></Layout></ProtectedRoute>} />
-      <Route path="/" element={<Navigate to={user ? '/dashboard' : '/login'} />} />
+      <Route path="*" element={<Navigate to={user ? '/dashboard' : '/login'} />} />
     </Routes>
   );
 };

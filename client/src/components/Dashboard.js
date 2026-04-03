@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { api } from '../api';
 
 const Dashboard = () => {
@@ -65,10 +66,10 @@ const Dashboard = () => {
           <h2 className="card-title">Quick Actions</h2>
         </div>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <a href="/sales" className="btn btn-primary">💰 New Sale</a>
-          <a href="/products" className="btn btn-secondary">📦 Add Product</a>
-          <a href="/repairs" className="btn btn-secondary">🔧 New Repair</a>
-          <a href="/reports" className="btn btn-secondary">📊 View Reports</a>
+          <Link to="/sales" className="btn btn-primary">💰 New Sale</Link>
+          <Link to="/products" className="btn btn-secondary">📦 Add Product</Link>
+          <Link to="/repairs" className="btn btn-secondary">🔧 New Repair</Link>
+          <Link to="/reports" className="btn btn-secondary">📊 View Reports</Link>
         </div>
       </div>
 
