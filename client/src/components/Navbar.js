@@ -23,6 +23,14 @@ const Navbar = () => {
     { path: '/reports', label: 'Reports', icon: '📈' },
   ];
 
+  const mobileNavItems = [
+    { path: '/dashboard', icon: '🏠', label: 'Home' },
+    { path: '/sales', icon: '💰', label: 'Sales' },
+    { path: '/products', icon: '📦', label: 'Products' },
+    { path: '/repairs', icon: '🔧', label: 'Repairs' },
+    { path: '/purchases', icon: '🛒', label: 'Purchase' },
+  ];
+
   return (
     <>
       <button className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)}>
@@ -61,6 +69,19 @@ const Navbar = () => {
             Sign Out
           </button>
         </div>
+      </div>
+
+      <div className="bottom-nav">
+        {mobileNavItems.map(item => (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={`bottom-nav-item ${location.pathname === item.path ? 'active' : ''}`}
+          >
+            <span className="bottom-nav-icon">{item.icon}</span>
+            <span className="bottom-nav-label">{item.label}</span>
+          </Link>
+        ))}
       </div>
     </>
   );
