@@ -573,7 +573,7 @@ tr:hover {
   
   .main-content {
     margin-left: 0;
-    padding: 1rem;
+    padding: 1rem 3.5rem 1rem 1rem;
     overflow-x: hidden;
   }
   
@@ -610,6 +610,28 @@ tr:hover {
     border-radius: 12px;
     cursor: pointer;
   }
+
+  .mobile-user-btn {
+    display: flex;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 99;
+  }
+
+  .mobile-user-btn a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
   
   .auth-card {
     padding: 2rem 1.5rem;
@@ -617,6 +639,10 @@ tr:hover {
 }
 
 .mobile-menu-btn {
+  display: none;
+}
+
+.mobile-user-btn {
   display: none;
 }
 
@@ -670,7 +696,7 @@ tr:hover {
     right: 0;
     background: white;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
-    padding: 0.5rem 0;
+    padding: 0.5rem 0.5rem 0.5rem 3rem;
     z-index: 1000;
     justify-content: space-around;
   }

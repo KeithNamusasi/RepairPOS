@@ -29,7 +29,7 @@ const Navbar = () => {
     { path: '/sales', icon: '💰', label: 'Sales' },
     { path: '/products', icon: '📦', label: 'Products' },
     { path: '/repairs', icon: '🔧', label: 'Repairs' },
-    { path: '/purchases', icon: '🛒', label: 'Purchase' },
+    { path: '/settings', icon: '👤', label: 'Profile' },
   ];
 
   return (
@@ -37,6 +37,11 @@ const Navbar = () => {
       <button className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? '✕' : '☰'}
       </button>
+      <div className="mobile-user-btn">
+        <Link to="/settings">
+          {user?.username?.charAt(0).toUpperCase()}
+        </Link>
+      </div>
       <div className={`overlay ${isOpen ? 'show' : ''}`} onClick={() => setIsOpen(false)} />
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
         <Link to="/" className="sidebar-brand">
