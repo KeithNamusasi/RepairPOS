@@ -21,6 +21,7 @@ const Navbar = () => {
     { path: '/repairs', label: 'Repairs', icon: '🔧' },
     { path: '/savings', label: 'Savings', icon: '💎' },
     { path: '/reports', label: 'Reports', icon: '📈' },
+    { path: '/settings', label: 'Settings', icon: '⚙️' },
   ];
 
   const mobileNavItems = [

@@ -11,6 +11,7 @@ import Purchases from './pages/Purchases';
 import Repairs from './pages/Repairs';
 import Savings from './pages/Savings';
 import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 
 const LoadingScreen = () => (
   <div style={{
@@ -72,6 +73,7 @@ const AppRoutes = () => {
       <Route path="/repairs" element={<ProtectedRoute><Layout><Repairs /></Layout></ProtectedRoute>} />
       <Route path="/savings" element={<ProtectedRoute><Layout><Savings /></Layout></ProtectedRoute>} />
       <Route path="/reports" element={<ProtectedRoute><Layout><Reports /></Layout></ProtectedRoute>} />
+      <Route path="/settings" element={<ProtectedRoute><Layout><Settings /></Layout></ProtectedRoute>} />
       <Route path="*" element={<Navigate to={user ? '/dashboard' : '/login'} />} />
     </Routes>
   );
