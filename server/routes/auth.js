@@ -58,6 +58,7 @@ router.post('/register', async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role,
         createdAt: user.createdAt
       }
     });
@@ -105,6 +106,7 @@ router.post('/login', async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role,
         createdAt: user.createdAt
       }
     });
@@ -144,6 +146,21 @@ router.delete('/delete', auth, async (req, res) => {
       return res.status(401).json({ message: 'Incorrect password' });
     }
 
+    // Delete all user's data
+    const Product = require('../models/Product');
+    const Sale = require('../models/Sale');
+    const Purchase = require('../models/Purchase');
+    const Repair = require('../models/Repair');
+    const Savings = require('../models/Savings');
+
+    await Promise.all([
+      Product.deleteMany({ user: userId }),
+      Sale.deleteMany({ user: userId }),
+      Purchase.deleteMany({ user: userId }),
+      Repair.deleteMany({ user: userId }),
+      Savings.deleteMany({ user: userId })
+    ]);
+
     // Delete user
     await User.findByIdAndDelete(userId);
 
@@ -162,6 +179,7 @@ router.get('/me', auth, async (req, res) => {
         id: req.user._id,
         username: req.user.username,
         email: req.user.email,
+        role: req.user.role,
         createdAt: req.user.createdAt,
         updatedAt: req.user.updatedAt
       }
