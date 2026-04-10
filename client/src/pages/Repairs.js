@@ -36,7 +36,8 @@ const Repairs = () => {
 
   const pendingCount = repairs.filter(r => r.status === 'Pending').length;
   const completedCount = repairs.filter(r => r.status === 'Completed' || r.status === 'Collected').length;
-  const totalIncome = repairs.filter(r => r.status !== 'Pending').reduce((sum, r) => sum + r.repairCost, 0);
+  const cancelledCount = repairs.filter(r => r.status === 'Cancelled' || r.status === 'Unrepairable').length;
+  const totalIncome = repairs.filter(r => r.status === 'Completed' || r.status === 'Collected').reduce((sum, r) => sum + r.repairCost, 0);
 
   return (
     <div>
@@ -60,6 +61,11 @@ const Repairs = () => {
           <div className="stat-icon profit">💵</div>
           <div className="stat-value">KES{totalIncome.toFixed(2)}</div>
           <div className="stat-label">Total Income</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon" style={{ background: '#fee2e2' }}>❌</div>
+          <div className="stat-value">{cancelledCount}</div>
+          <div className="stat-label">Cancelled/Unrepairable</div>
         </div>
       </div>
 
@@ -116,7 +122,7 @@ const Repairs = () => {
                     <td className="px-4 py-3 whitespace-nowrap" style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{repair.problemDescription}</td>
                     <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>KES{repair.repairCost}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className={`badge badge-KES{repair.status.toLowerCase().replace(' ', '-')}`}>
+                      <span className={`badge badge-${repair.status.toLowerCase().replace(' ', '-')}`}>
                         {repair.status}
                       </span>
                     </td>
@@ -132,6 +138,8 @@ const Repairs = () => {
                         <option value="In Repair">In Repair</option>
                         <option value="Completed">Completed</option>
                         <option value="Collected">Collected</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Unrepairable">Unrepairable</option>
                       </select>
                     </td>
                   </tr>

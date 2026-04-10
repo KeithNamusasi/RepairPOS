@@ -22,6 +22,17 @@ const Purchases = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.productId && formData.productName) {
+      const newProduct = await api.products.create({
+        name: formData.productName,
+        category: 'Auto Created',
+        buyPrice: formData.buyingPrice,
+        sellPrice: parseFloat(formData.buyingPrice) * 1.3,
+        stockQuantity: formData.quantity,
+        supplier: formData.supplier
+      });
+      formData.productId = newProduct._id;
+    }
     await api.purchases.create(formData);
     setFormData({ productId: '', productName: '', supplier: '', quantity: 1, buyingPrice: '' });
     setShowForm(false);
