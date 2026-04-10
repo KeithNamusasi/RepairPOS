@@ -39,6 +39,13 @@ const Purchases = () => {
           supplier: formData.supplier
         });
         formData.productId = newProduct._id;
+      } else if (formData.productId) {
+        const product = products.find(p => p._id === formData.productId);
+        await api.products.update(formData.productId, {
+          stockQuantity: product.stockQuantity + formData.quantity,
+          buyPrice: formData.buyingPrice,
+          supplier: formData.supplier
+        });
       }
       await api.purchases.create(formData);
       setFormData({ productId: '', productName: '', supplier: '', quantity: 1, buyingPrice: '' });
@@ -82,16 +89,34 @@ const Purchases = () => {
                 value={formData.productId}
                 onChange={e => {
                   const product = products.find(p => p._id === e.target.value);
-                  setFormData({ ...formData, productId: e.target.value, productName: product?.name || '' });
+                  if (product) {
+                    setFormData({ 
+                      ...formData, 
+                      productId: e.target.value, 
+                      productName: product.name,
+                      supplier: product.supplier || '',
+                      buyingPrice: product.buyPrice
+                    });
+                  } else {
+                    setFormData({ ...formData, productId: e.target.value, productName: '', supplier: '', buyingPrice: '' });
+                  }
                 }}
                 className="form-select"
               >
                 <option value="">Choose a product...</option>
                 {products.map(p => (
-                  <option key={p._id} value={p._id}>{p.name}</option>
+                  <option key={p._id} value={p._id}>{p.name} - {p.category}</option>
                 ))}
               </select>
             </div>
+            {formData.productId && (
+              <div style={{ marginBottom: '1rem', padding: '0.75rem', background: '#e0f2fe', borderRadius: '8px', fontSize: '0.875rem' }}>
+                <strong>Product Info:</strong> Category: {products.find(p => p._id === formData.productId)?.category} | 
+                Current Stock: {products.find(p => p._id === formData.productId)?.stockQuantity} | 
+                Current Buy Price: KES {products.find(p => p._id === formData.productId)?.buyPrice} | 
+                Current Sell Price: KES {products.find(p => p._id === formData.productId)?.sellPrice}
+              </div>
+            )}
             <div className="form-row">
               <input type="text" placeholder="Product Name (if new)" value={formData.productName} onChange={e => setFormData({...formData, productName: e.target.value})} className="form-input" />
               <input type="text" placeholder="Supplier Name" value={formData.supplier} onChange={e => setFormData({...formData, supplier: e.target.value})} className="form-input" required />
