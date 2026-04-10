@@ -5,6 +5,7 @@ const Purchases = () => {
   const [purchases, setPurchases] = useState([]);
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({ productId: '', productName: '', supplier: '', quantity: 1, buyingPrice: '' });
 
   useEffect(() => {
@@ -12,31 +13,40 @@ const Purchases = () => {
   }, []);
 
   const loadData = async () => {
-    const [purchasesData, productsData] = await Promise.all([
-      api.purchases.getAll(),
-      api.products.getAll()
-    ]);
-    setPurchases(purchasesData);
-    setProducts(productsData);
+    try {
+      const [purchasesData, productsData] = await Promise.all([
+        api.purchases.getAll(),
+        api.products.getAll()
+      ]);
+      setPurchases(purchasesData);
+      setProducts(productsData);
+    } catch (err) {
+      setError('Failed to load data');
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.productId && formData.productName) {
-      const newProduct = await api.products.create({
-        name: formData.productName,
-        category: 'Auto Created',
-        buyPrice: formData.buyingPrice,
-        sellPrice: parseFloat(formData.buyingPrice) * 1.3,
-        stockQuantity: formData.quantity,
-        supplier: formData.supplier
-      });
-      formData.productId = newProduct._id;
+    setError('');
+    try {
+      if (!formData.productId && formData.productName) {
+        const newProduct = await api.products.create({
+          name: formData.productName,
+          category: 'Auto Created',
+          buyPrice: formData.buyingPrice,
+          sellPrice: parseFloat(formData.buyingPrice) * 1.3,
+          stockQuantity: formData.quantity,
+          supplier: formData.supplier
+        });
+        formData.productId = newProduct._id;
+      }
+      await api.purchases.create(formData);
+      setFormData({ productId: '', productName: '', supplier: '', quantity: 1, buyingPrice: '' });
+      setShowForm(false);
+      loadData();
+    } catch (err) {
+      setError(err.message);
     }
-    await api.purchases.create(formData);
-    setFormData({ productId: '', productName: '', supplier: '', quantity: 1, buyingPrice: '' });
-    setShowForm(false);
-    loadData();
   };
 
   const totalPurchases = purchases.reduce((sum, p) => sum + p.totalCost, 0);
@@ -65,6 +75,7 @@ const Purchases = () => {
 
         {showForm && (
           <form onSubmit={handleSubmit} style={{ marginBottom: '1.5rem', padding: '1.5rem', background: '#f9fafb', borderRadius: '12px' }}>
+            {error && <div style={{ color: '#dc2626', marginBottom: '1rem', padding: '0.75rem', background: '#fee2e2', borderRadius: '8px' }}>{error}</div>}
             <div className="form-group">
               <label className="form-label">Select Existing Product (Optional)</label>
               <select

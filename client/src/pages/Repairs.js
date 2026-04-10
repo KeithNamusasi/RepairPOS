@@ -4,8 +4,12 @@ import { api } from '../api';
 const Repairs = () => {
   const [repairs, setRepairs] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentRepair, setPaymentRepair] = useState(null);
+  const [paymentAmount, setPaymentAmount] = useState('');
   const [formData, setFormData] = useState({
-    customerName: '', phoneNumber: '', device: '', problemDescription: '', repairCost: '', status: 'Pending'
+    customerName: '', phoneNumber: '', device: '', problemDescription: '', repairCost: '', status: 'Pending', amountPaid: 0
   });
 
   useEffect(() => {
@@ -13,25 +17,59 @@ const Repairs = () => {
   }, []);
 
   const loadRepairs = async () => {
-    const data = await api.repairs.getAll();
-    setRepairs(data);
+    try {
+      const data = await api.repairs.getAll();
+      setRepairs(data);
+    } catch (err) {
+      setError('Failed to load repairs');
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await api.repairs.create(formData);
-    setFormData({ customerName: '', phoneNumber: '', device: '', problemDescription: '', repairCost: '', status: 'Pending' });
-    setShowForm(false);
-    loadRepairs();
+    setError('');
+    try {
+      await api.repairs.create(formData);
+      setFormData({ customerName: '', phoneNumber: '', device: '', problemDescription: '', repairCost: '', status: 'Pending', amountPaid: 0 });
+      setShowForm(false);
+      loadRepairs();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const handleStatusChange = async (id, newStatus) => {
-    const updateData = { status: newStatus };
-    if (newStatus === 'Completed') {
-      updateData.dateCompleted = new Date();
+    setError('');
+    try {
+      const updateData = { status: newStatus };
+      if (newStatus === 'Completed') {
+        updateData.dateCompleted = new Date();
+      }
+      await api.repairs.update(id, updateData);
+      loadRepairs();
+    } catch (err) {
+      setError(err.message);
     }
-    await api.repairs.update(id, updateData);
-    loadRepairs();
+  };
+
+  const openPaymentModal = (repair) => {
+    setPaymentRepair(repair);
+    setPaymentAmount('');
+    setShowPaymentModal(true);
+  };
+
+  const handleAddPayment = async () => {
+    if (!paymentRepair || !paymentAmount) return;
+    setError('');
+    try {
+      const newAmount = (paymentRepair.amountPaid || 0) + parseFloat(paymentAmount);
+      await api.repairs.update(paymentRepair._id, { amountPaid: newAmount });
+      setShowPaymentModal(false);
+      setPaymentRepair(null);
+      loadRepairs();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const pendingCount = repairs.filter(r => r.status === 'Pending').length;
@@ -78,11 +116,15 @@ const Repairs = () => {
 
         {showForm && (
           <form onSubmit={handleSubmit} style={{ marginBottom: '1.5rem', padding: '1.5rem', background: '#f9fafb', borderRadius: '12px' }}>
+            {error && <div style={{ color: '#dc2626', marginBottom: '1rem', padding: '0.75rem', background: '#fee2e2', borderRadius: '8px' }}>{error}</div>}
             <div className="form-row">
               <input type="text" placeholder="Customer Name" value={formData.customerName} onChange={e => setFormData({...formData, customerName: e.target.value})} className="form-input" required />
-              <input type="text" placeholder="Phone Number" value={formData.phoneNumber} onChange={e => setFormData({...formData, phoneNumber: e.target.value})} className="form-input" required />
+              <input type="text" placeholder="Phone Number (optional)" value={formData.phoneNumber} onChange={e => setFormData({...formData, phoneNumber: e.target.value})} className="form-input" />
               <input type="text" placeholder="Device (e.g. iPhone 12)" value={formData.device} onChange={e => setFormData({...formData, device: e.target.value})} className="form-input" required />
               <input type="number" placeholder="Repair Cost (KES)" value={formData.repairCost} onChange={e => setFormData({...formData, repairCost: e.target.value})} className="form-input" required />
+            </div>
+            <div className="form-row">
+              <input type="number" placeholder="Amount Paid (KES)" value={formData.amountPaid} onChange={e => setFormData({...formData, amountPaid: parseFloat(e.target.value) || 0})} className="form-input" min="0" />
             </div>
             <div className="form-group">
               <textarea placeholder="Problem Description" value={formData.problemDescription} onChange={e => setFormData({...formData, problemDescription: e.target.value})} className="form-textarea" rows="3" required />
@@ -108,19 +150,27 @@ const Repairs = () => {
                   <th className="px-4 py-3 text-left whitespace-nowrap">Device</th>
                   <th className="px-4 py-3 text-left whitespace-nowrap">Problem</th>
                   <th className="px-4 py-3 text-left whitespace-nowrap">Cost</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Paid</th>
+                  <th className="px-4 py-3 text-left whitespace-nowrap">Balance</th>
                   <th className="px-4 py-3 text-left whitespace-nowrap">Status</th>
                   <th className="px-4 py-3 text-left whitespace-nowrap">Date</th>
                   <th className="px-4 py-3 text-left whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {repairs.map(repair => (
+                {repairs.map(repair => {
+                  const balance = (repair.repairCost || 0) - (repair.amountPaid || 0);
+                  return (
                   <tr key={repair._id}>
                     <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '500' }}>{repair.customerName}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{repair.phoneNumber}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{repair.phoneNumber || '-'}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{repair.device}</td>
                     <td className="px-4 py-3 whitespace-nowrap" style={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{repair.problemDescription}</td>
                     <td className="px-4 py-3 whitespace-nowrap" style={{ fontWeight: '600' }}>KES{repair.repairCost}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ color: '#059669' }}>KES{repair.amountPaid || 0}</td>
+                    <td className="px-4 py-3 whitespace-nowrap" style={{ color: balance > 0 ? '#dc2626' : '#059669', fontWeight: '600' }}>
+                      KES{balance}
+                    </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span className={`badge badge-${repair.status.toLowerCase().replace(' ', '-')}`}>
                         {repair.status}
@@ -143,12 +193,39 @@ const Repairs = () => {
                       </select>
                     </td>
                   </tr>
-                ))}
+                );
+              })}
               </tbody>
             </table>
           </div>
         )}
       </div>
+
+      {showPaymentModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div style={{ background: 'white', padding: '2rem', borderRadius: '12px', width: '90%', maxWidth: '400px' }}>
+            <h3 style={{ marginBottom: '1rem' }}>Add Payment</h3>
+            <p style={{ marginBottom: '1rem', color: '#6b7280' }}>
+              {paymentRepair?.customerName} - {paymentRepair?.device}
+            </p>
+            <p style={{ marginBottom: '1rem' }}>
+              Outstanding: <strong style={{ color: '#dc2626' }}>KES{(paymentRepair?.repairCost || 0) - (paymentRepair?.amountPaid || 0)}</strong>
+            </p>
+            <input
+              type="number"
+              placeholder="Amount to pay"
+              value={paymentAmount}
+              onChange={e => setPaymentAmount(e.target.value)}
+              className="form-input"
+              style={{ marginBottom: '1rem' }}
+            />
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button onClick={handleAddPayment} className="btn btn-primary">Add Payment</button>
+              <button onClick={() => setShowPaymentModal(false)} className="btn" style={{ background: '#e5e7eb' }}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
